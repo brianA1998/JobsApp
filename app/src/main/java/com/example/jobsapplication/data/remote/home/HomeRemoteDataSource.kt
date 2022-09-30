@@ -20,7 +20,6 @@ class HomeRemoteDataSource {
 
         try {
             publicationReference = FirebaseFirestore.getInstance().collection("publications")
-                .orderBy("created_at", Query.Direction.DESCENDING)
         } catch (e: Throwable) {
             close(e)
         }
@@ -45,7 +44,7 @@ class HomeRemoteDataSource {
             } catch (e: Exception) {
                 close(e)
             }
-            offer(Result.Success(publicationList))
+            this.trySend(Result.Success(publicationList)).isSuccess
         }
         awaitClose { subscription?.remove() }
     }
